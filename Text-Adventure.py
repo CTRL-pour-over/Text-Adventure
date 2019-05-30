@@ -5,28 +5,28 @@ from enum import Enum
 print colored('\n\nHello Family. This is a very special game.\t', 'magenta'), colored('Version .01\n\n\n', 'cyan')
 
 class Room(object):
-    playerPresent = False
+    player_present = False
 
-    def __init__(self, arg_description, arg_name, arg_itemsContained, arg_keyWords, arg_events, arg_hasBeenVisited, arg_adacientRooms, arg_playerPresent):
+    def __init__(self, arg_description, arg_name, arg_items_contained, arg_keywords, arg_events, arg_has_been_visited, arg_adacient_rooms, arg_player_present):
         self.description = arg_description
         self.name = arg_name
-        self.itemsContained = arg_itemsContained
-        self.keyWords = arg_keyWords
+        self.items_contained = arg_items_contained
+        self.keywords = arg_keywords
         self.events = arg_events
-        self.hasBeenVisited = arg_hasBeenVisited
-        self.adacientRooms = arg_adacientRooms
-        self.playerPresent = arg_playerPresent
+        self.has_been_visited = arg_has_been_visited
+        self.adacient_rooms = arg_adacient_rooms
+        self.player_present = arg_player_present
 
-    def Render_Status(self):
+    def render_status(self):
         print "<<============================ Displaying Room Stats ============================>>\n"
         print 'Room Description:', colored(self.description, 'yellow')
         print '\nRoom Name:', colored(self.name, 'red')
-        print '\nRoom Items:', colored(self.itemsContained, 'magenta')
-        print '\nRoom Keywords List:', colored(self.keyWords, 'green')
+        print '\nRoom Items:', colored(self.items_contained, 'magenta')
+        print '\nRoom Keywords List:', colored(self.keywords, 'green')
         print '\nRoom Events:', colored(self.events, 'yellow')
-        print '\nHas Been Visited:', colored(self.hasBeenVisited, 'red')
-        print '\nAdacient Rooms: ', colored(self.adacientRooms, 'magenta')
-        print '\nPlayer Present:', colored(self.playerPresent, 'green')
+        print '\nHas Been Visited:', colored(self.has_been_visited, 'red')
+        print '\nAdacient Rooms: ', colored(self.adacient_rooms, 'magenta')
+        print '\nPlayer Present:', colored(self.player_present, 'green')
 
 class Player(object):
     name = "Thomas"
@@ -34,7 +34,7 @@ class Player(object):
     min_damage = 1.0
     max_damage = 999.9
 
-    def __init__(self, arg_name, arg_health, arg_min_damage, arg_max_damage, arg_current_Room):
+    def __init__(self, arg_name, arg_health, arg_min_damage, arg_max_damage, arg_current_room):
         # setting the variable to the argument
         self.name = arg_name
         # setting the variable to the argument
@@ -43,31 +43,29 @@ class Player(object):
         self.min_damage = 0.0
         # setting the variable to the argument
         self.max_damage = arg_max_damage
-        self.current_Room = arg_current_Room # room id
+        self.current_room = arg_current_room # room id
 
-    def Render_Status(self):
+    def render_status(self):
         print "<<============================ Displaying Player Stats ============================>>\n"
         print colored("Player Name: " + self.name, 'yellow')
         print colored("\nPlayer Health: " + str(self.health), 'green')
         print colored("\nPlayer Min Damage: " + str(self.min_damage), 'blue')
         print colored("\nPlayer Max Damage: " + str(self.max_damage), 'red')
-        print colored("\nPlayer Current Room: " + str(self.current_Room), 'magenta')
+        print colored("\nPlayer Current Room: " + str(self.current_room), 'magenta')
         print "\n"
         
 
-
-
 class GameManager(object):
     class RoomID(Enum):
-        _CaptainsQuarters = 1
-        _LowerDeck = 2
-        _OutsideDeck = 3
+        _captains_quarters = 1
+        _lower_deck = 2
+        _outside_deck = 3
 
     game_over = False
     def __init__(self):
         self.game_over = False
         # instantiated a Player object
-        self.player_1 = Player("Shemar", 100.0, 1.0, 99.9, self.RoomID._OutsideDeck) # player current room needs to be updated! 
+        self.player_1 = Player("Shemar", 100.0, 1.0, 99.9, self.RoomID._outside_deck) # player current room needs to be updated! 
         
         # instantiate ALL rooms
         self.captains_quarters = Room("This is the captains_quarters Do you walk out the door or na?", "captains_quarters", {'baby':'item'}, ['walk', 'door', 'go'],[], True, ['outside deck'], True)
@@ -83,26 +81,26 @@ class GameManager(object):
             _ = system('clear')
 
     #Explains the situation of the game, Renders text, display stats and other important imformation.
-    def Render_Status(self):
-        self.player_1.Render_Status()
+    def render_status(self):
+        self.player_1.render_status()
 
-        if self.player_1.current_Room == self.RoomID._CaptainsQuarters:
-            self.captains_quarters.Render_Status()
-        elif self.player_1.current_Room == self.RoomID._OutsideDeck:
-            self.outside_deck.Render_Status()
-        elif self.player_1.current_Room == self.RoomID._LowerDeck:
-            self.lower_deck.Render_Status()
+        if self.player_1.current_room == self.RoomID._captains_quarters:
+            self.captains_quarters.render_status()
+        elif self.player_1.current_room == self.RoomID._outside_deck:
+            self.outside_deck.render_status()
+        elif self.player_1.current_room == self.RoomID._lower_deck:
+            self.lower_deck.render_status()
 
 
     # Catches the raw_input from Player, verifies input is good, does not run intense checks. UwU 
-    def Player_Input(self):   
-        tempKeywords = self.GetCurrentRoomKeywords()     
+    def player_input(self):   
+        temp_keywords = self.get_current_room_keywords()     
         
-        print tempKeywords
+        print temp_keywords
 
         choice = raw_input("What do you want to do? >>>   ").lower().split()
         print "choice: %s" % choice
-        for thing in tempKeywords:
+        for thing in temp_keywords:
             if thing in choice:
 # loop will scan the full list. instead of having 'good', 'nope', 'nope', lets just plug in a function
 # if only i could figure out what function lol
@@ -113,115 +111,119 @@ class GameManager(object):
                 print "nope"
         return "NONE"
 
-    def Move_Player(arg_DestinationRoomId, arg_PreviousRoomId):    
+    def move_player(self, arg_destination_room_id, arg_previous_room_id):    
         #Paranoid check to not waste our time 
-        if self.player_1.current_Room == arg_DestinationRoomId:  
+        if self.player_1.current_room == arg_destination_room_id:  
             print "You are already here."
             return
-        #region playerPresent = False if-statements. DONE.
-        #Find the room we are currently in, set playerPresent to false because we are leaving. 
-        if self.player_1.current_Room == self.RoomID._CaptainsQuarters:
+        #region player_present = False if-statements. DONE.
+        #Find the room we are currently in, set player_present to false because we are leaving. 
+        if self.player_1.current_room == self.RoomID._captains_quarters:
             #Change variables
-            self.captains_quarters.playerPresent = False
-        elif self.player_1.current_Room == self.RoomID._LowerDeck:
+            self.captains_quarters.player_present = False
+        elif self.player_1.current_room == self.RoomID._lower_deck:
             #Change variables
-            self.lower_deck.playerPresent = False
-        elif self.player_1.current_Room == self.RoomID._OutsideDeck:
+            self.lower_deck.player_present = False
+        elif self.player_1.current_room == self.RoomID._outside_deck:
             #Change variables
-            self.outside_deck.playerPresent = False
+            self.outside_deck.player_present = False
         # make sure we dont run code we dont have to.
         else: 
-            print "ERROR: Move_Player..."
-            return
-        
-        #endregion
-
-        
-        #region playerPresent = True for Room we are going to.DONE.
-        if arg_DestinationRoomId == self.RoomID._CaptainsQuarters:
+            print "ERROR: move_player..."
+            return       
+        #endregion        
+        #region player_present = True for Room we are going to.DONE.
+        if arg_destination_room_id == self.RoomID._captains_quarters:
             #Change variables
-            self.captains_quarters.playerPresent = True
-            self.captains_quarters.hasBeenVisited = True
-            self.player_1.current_Room = self.RoomID._CaptainsQuarters
-        elif arg_DestinationRoomId == self.RoomID._LowerDeck:
+            self.captains_quarters.player_present = True
+            self.captains_quarters.has_been_visited = True
+            self.player_1.current_room = self.RoomID._captains_quarters
+        elif arg_destination_room_id == self.RoomID._lower_deck:
             #Change variables
-            self.lower_deck.playerPresent = True
-            self.lower_deck.hasBeenVisited = True
-            self.player_1.current_Room = self.RoomID._LowerDeck
-        elif arg_DestinationRoomId == self.RoomID._OutsideDeck:
+            self.lower_deck.player_present = True
+            self.lower_deck.has_been_visited = True
+            self.player_1.current_room = self.RoomID._lower_deck
+        elif arg_destination_room_id == self.RoomID._outside_deck:
             #Change variables
-            self.outside_deck.playerPresent = True
-            self.outside_deck.hasBeenVisited= True
-            self.player_1.current_Room = self.RoomID._OutsideDeck
+            self.outside_deck.player_present = True
+            self.outside_deck.has_been_visited= True
+            self.player_1.current_room = self.RoomID._outside_deck
         else:
             print "really should never see this."
             return
         #endregion
-        print self.player_1.current_Room
+        print self.player_1.current_room
 
     
 
     # Goes through previously stored player input, checks input against options. Determines outcome. 
-    def Parse_Input(self, arg_playerinput):
-        print arg_playerinput
+    def parse_input(self, arg_player_input):
+        print arg_player_input
         
     # Visual response to input. 
-    def Give_Feedback(self):
+    def give_feedback(self):
         pass
     # Reacts to input and prepares all game objects for next round of GameLoop.
-    def React_to_Input(self,arg_choice ):
+    def react_to_input(self,arg_choice ):
 
         print arg_choice
         
 
         
-    def GetCurrentRoomKeywords(self):
+    def get_current_room_keywords(self):
         #If statement or loop to mind the current room 
-        if self.player_1.current_Room == self.RoomID._CaptainsQuarters:
-            print "GetCurrentRoomKeywords: "
-            return self.captains_quarters.keyWords
-        elif self.player_1.current_Room == self.RoomID._OutsideDeck:
-            print "GetCurrentRoomKeywords: "
-            return self.outside_deck.keyWords
-        elif self.player_1.current_Room == self.RoomID._LowerDeck:
-            print "GetCurrentRoomKeywords: "
-            return self.lower_deck.keyWords
+        if self.player_1.current_room == self.RoomID._captains_quarters:
+            print "get_current_room_keywords: "
+            return self.captains_quarters.keywords
+        elif self.player_1.current_room == self.RoomID._outside_deck:
+            print "get_current_room_keywords: "
+            return self.outside_deck.keywords
+        elif self.player_1.current_room == self.RoomID._lower_deck:
+            print "get_current_room_keywords: "
+            return self.lower_deck.keywords
         else:
             print "really should never see this."
             return ["BrokenList"]
     # gets the adacient rooms so we can move the player smart style
-    def GetCurrentRoomAdacientRooms(self):
-        if self.captains_quarters.adacientRooms == self.RoomID._CaptainsQuarters:
+    def get_current_room_adacient_rooms(self):
+        if self.captains_quarters.adacient_rooms == self.RoomID._captains_quarters:
             print "GetCurrrentRoomAdacientRooms: "
-            return self.captains_quarters.adacientRooms
-        elif self.outside_deck.adacientRooms == self.RoomID._OutsideDeck:
+            return self.captains_quarters.adacient_rooms
+        elif self.outside_deck.adacient_rooms == self.RoomID._outside_deck:
             print "GetCurrrentRoomAdacientRooms: "
-            return self.outside_deck.adacientRooms
-        elif self.lower_deck.adacientRooms == self.RoomID._LowerDeck:
+            return self.outside_deck.adacient_rooms
+        elif self.lower_deck.adacient_rooms == self.RoomID._lower_deck:
             print "GetCurrrentRoomAdacientRooms: "
-            return self.outside_deck.adacientRooms
+            return self.outside_deck.adacient_rooms
 
 
-class DecisionPacket(object):
-    self.move = arg_move
-    self.items = arg_items
-    self.health = arg_health
-    self.attack = arg_attack
-    self.input = arg_input
+class decision_packet(object):
+    def __init__(self, arg_move, arg_items, arg_health, arg_attack, arg_input):
+        self.move = -1
+        self.items = -1
+        self.health = -1
+        self.attack = -1
+        self.input = -1
 
+    def render_status(self):
+        print self.move
+        print self.items
+        print self.health
+        print self.attack
+        print self.input
 
 gm = GameManager()
 while gm.game_over is False:
     sleep(.5)
     gm.clear()
     sleep(.4)
-    gm.Render_Status()
+    gm.render_status()
     #Received and verified input is a good choice.
     sleep(.3)
-    playersChoice = gm.Player_Input()
+    players_choice = gm.player_input()
     #Update the game accordingly.
     sleep(.3)
-    gm.React_to_Input(playersChoice)
+    gm.react_to_input(players_choice)
     sleep(.2)
-    gm.Parse_Input(playersChoice)
+    gm.parse_input(players_choice)
     sleep(.5)

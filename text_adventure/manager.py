@@ -1,60 +1,8 @@
-from termcolor import colored
-from os import system, name
-from time import sleep
 from enum import Enum
-print colored('\n\nHello Family. This is a very special game.\t', 'magenta'), colored('Version .01\n\n\n', 'cyan')
-
-class Room(object):
-    player_present = False
-
-    def __init__(self, arg_description, arg_name, arg_items_contained, arg_keywords, arg_events, arg_has_been_visited, arg_adacient_rooms, arg_player_present):
-        self.description = arg_description
-        self.name = arg_name
-        self.items_contained = arg_items_contained
-        self.keywords = arg_keywords
-        self.events = arg_events
-        self.has_been_visited = arg_has_been_visited
-        self.adacient_rooms = arg_adacient_rooms
-        self.player_present = arg_player_present
-
-    def render_status(self):
-        print "<<============================ Displaying Room Stats ============================>>\n"
-        print 'Room Description:', colored(self.description, 'yellow')
-        print '\nRoom Name:', colored(self.name, 'red')
-        print '\nRoom Items:', colored(self.items_contained, 'magenta')
-        print '\nRoom Keywords List:', colored(self.keywords, 'green')
-        print '\nRoom Events:', colored(self.events, 'yellow')
-        print '\nHas Been Visited:', colored(self.has_been_visited, 'red')
-        print '\nAdacient Rooms: ', colored(self.adacient_rooms, 'magenta')
-        print '\nPlayer Present:', colored(self.player_present, 'green')
-
-class Player(object):
-    name = "Thomas"
-    health = 100.00
-    min_damage = 1.0
-    max_damage = 999.9
-
-    def __init__(self, arg_name, arg_health, arg_min_damage, arg_max_damage, arg_current_room):
-        # setting the variable to the argument
-        self.name = arg_name
-        # setting the variable to the argument
-        self.health = arg_health
-        # setting the variable to the argument
-        self.min_damage = 0.0
-        # setting the variable to the argument
-        self.max_damage = arg_max_damage
-        self.current_room = arg_current_room # room id
-
-    def render_status(self):
-        print "<<============================ Displaying Player Stats ============================>>\n"
-        print colored("Player Name: " + self.name, 'yellow')
-        print colored("\nPlayer Health: " + str(self.health), 'green')
-        print colored("\nPlayer Min Damage: " + str(self.min_damage), 'blue')
-        print colored("\nPlayer Max Damage: " + str(self.max_damage), 'red')
-        print colored("\nPlayer Current Room: " + str(self.current_room), 'magenta')
-        print "\n"
-        
-
+from os import system, name
+from text_adventure.player import Player
+from text_adventure.room import Room
+# this is gm. this is where all the magic happens
 class GameManager(object):
     class RoomID(Enum):
         _captains_quarters = 1
@@ -106,16 +54,7 @@ class GameManager(object):
 # if only i could figure out what function lol
                 print "success"
                  
-                return "We moved %r" % choice 
-            else:
-                print "nope"
-        return "NONE"
-
-    def move_player(self, arg_destination_room_id, arg_previous_room_id):    
-        #Paranoid check to not waste our time 
-        if self.player_1.current_room == arg_destination_room_id:  
-            print "You are already here."
-            return
+                return "We movedgit" 
         #region player_present = False if-statements. DONE.
         #Find the room we are currently in, set player_present to false because we are leaving. 
         if self.player_1.current_room == self.RoomID._captains_quarters:
@@ -195,35 +134,3 @@ class GameManager(object):
         elif self.lower_deck.adacient_rooms == self.RoomID._lower_deck:
             print "GetCurrrentRoomAdacientRooms: "
             return self.outside_deck.adacient_rooms
-
-
-class decision_packet(object):
-    def __init__(self, arg_move, arg_items, arg_health, arg_attack, arg_input):
-        self.move = -1
-        self.items = -1
-        self.health = -1
-        self.attack = -1
-        self.input = -1
-
-    def render_status(self):
-        print self.move
-        print self.items
-        print self.health
-        print self.attack
-        print self.input
-
-gm = GameManager()
-while gm.game_over is False:
-    sleep(.5)
-    gm.clear()
-    sleep(.4)
-    gm.render_status()
-    #Received and verified input is a good choice.
-    sleep(.3)
-    players_choice = gm.player_input()
-    #Update the game accordingly.
-    sleep(.3)
-    gm.react_to_input(players_choice)
-    sleep(.2)
-    gm.parse_input(players_choice)
-    sleep(.5)
